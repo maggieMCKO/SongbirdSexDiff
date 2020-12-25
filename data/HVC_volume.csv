@@ -1,0 +1,67 @@
+Species,Group,Sex,ID,HVC.Volume..mm3.
+Cordon bleu,CBf,female,80,0.1604
+Cordon bleu,CBf,female,83,0.1036
+Cordon bleu,CBf,female,89,0.1588
+Cordon bleu,CBf,female,91,0.1255
+Cordon bleu,CBf,female,92,0.1455
+Cordon bleu,CBf,female,93,0.1206
+Cordon bleu,CBm,male,81,0.2462
+Cordon bleu,CBm,male,82,0.254
+Cordon bleu,CBm,male,84,0.1909
+Cordon bleu,CBm,male,86,0.238
+Cordon bleu,CBm,male,88,0.2566
+Cordon bleu,CBm,male,90,0.2834
+Forest weaver,FWf,female,2,0.2586
+Forest weaver,FWf,female,4,0.2371
+Forest weaver,FWf,female,13,0.4171
+Forest weaver,FWf,female,5,0.3744
+Forest weaver,FWf,female,8,0.3821
+Forest weaver,FWf,female,17,0.4712
+Forest weaver,FWm,male,1,0.4056
+Forest weaver,FWm,male,6,0.5189
+Forest weaver,FWm,male,7,0.4507
+Forest weaver,FWm,male,14,0.6427
+Forest weaver,FWm,male,18,0.7869
+Forest weaver,FWm,male,12,0.3623
+Canary,LDf,female,689,0.1541
+Canary,LDf,female,697,0.1321
+Canary,LDf,female,724,0.1156
+Canary,LDf,female,725,0.0802
+Canary,LDf,female,730,0.0967
+Canary,LDf,female,735,0.1159
+Canary,LDm,male,1,0.4642
+Canary,LDm,male,3,0.4352
+Canary,LDm,male,4,0.36
+Canary,LDm,male,5,0.5535
+Canary,LDm,male,22,0.4687
+Canary,LDm,male,172,0.351
+Canary,SDm,male,1,0.17
+Canary,SDm,male,2,0.23
+Canary,SDm,male,3,0.23
+Canary,SDm,male,4,0.21
+Canary,SDm,male,5,0.32
+Canary,SDm,male,6,0.21
+Canary,SDmT,male,2,NA
+Canary,SDmT,male,3,NA
+Canary,SDmT,male,4,0.4302
+Canary,SDmT,male,5,0.5288
+Canary,SDmT,male,6,NA
+Canary,SDmT,male,7,0.476
+Canary,SDfS,female,958,0.193842
+Canary,SDfS,female,959,0.171699
+Canary,SDfS,female,960,0.126203
+Canary,SDfS,female,961,0.199529
+Canary,SDfS,female,962,0.13297900000000001
+Canary,SDfS,female,963,0.231473
+Canary,SDf,female,993,0.0943921
+Canary,SDf,female,986,0.0851356
+Canary,SDf,female,995,0.0555874
+Canary,SDf,female,992,0.086757
+Canary,SDf,female,984,0.1278244
+Canary,SDf,female,982,0.1685046
+Canary,SDfT,female,797,0.1654312
+Canary,SDfT,female,798,0.2736778
+Canary,SDfT,female,799,0.412973
+Canary,SDfT,female,803,0.1966492
+Canary,SDfT,female,804,0.2338688
+Canary,SDfT,female,805,0.237886

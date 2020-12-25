@@ -1,0 +1,43 @@
+Species,Group,Sex,ID,Testo..ng.ml.,Facet
+Canary,LDf,female,689,0.065,Breeding
+Canary,LDf,female,697,0.049,Breeding
+Canary,LDf,female,724,0.034,Breeding
+Canary,LDf,female,725,0.042,Breeding
+Canary,LDf,female,730,0.068,Breeding
+Canary,LDf,female,735,0.097,Breeding
+Canary,LDm,male,1,4.34,Breeding
+Canary,LDm,male,3,0.06,Breeding
+Canary,LDm,male,4,3.65,Breeding
+Canary,LDm,male,5,0.06,Breeding
+Canary,LDm,male,22,1.25,Breeding
+Canary,LDm,male,172,1.21,Breeding
+Canary,SDm,male,1,0.04,Non-breeding
+Canary,SDm,male,2,0.06,Non-breeding
+Canary,SDm,male,3,0.14,Non-breeding
+Canary,SDm,male,4,0.05,Non-breeding
+Canary,SDm,male,5,0.05,Non-breeding
+Canary,SDm,male,6,0.06,Non-breeding
+Canary,SDfS,female,958R,0.07662,Non-breeding
+Canary,SDfS,female,959R,2.807,Non-breeding
+Canary,SDfS,female,960R,0.05276,Non-breeding
+Canary,SDfS,female,961R,0.08056,Non-breeding
+Canary,SDfS,female,962R,0.0994,Non-breeding
+Canary,SDfS,female,963L,0.03738,Non-breeding
+Canary,SDf,female,993,0.04337,Non-breeding
+Canary,SDf,female,986,0.03668,Non-breeding
+Canary,SDf,female,995,0.0304,Non-breeding
+Canary,SDf,female,992,0.027530000000000002,Non-breeding
+Canary,SDf,female,984,0.05298,Non-breeding
+Canary,SDf,female,982,0.09243000000000001,Non-breeding
+Canary,SDfT,female,797,13.183200000000001,+ T
+Canary,SDfT,female,798,5.73673,+ T
+Canary,SDfT,female,799,7.557939999999999,+ T
+Canary,SDfT,female,803,12.4165,+ T
+Canary,SDfT,female,804,9.332139999999999,+ T
+Canary,SDfT,female,805,7.62151,+ T
+Canary,SDmT,male,1,35.63741,+ T
+Canary,SDmT,male,2,14.47843,+ T
+Canary,SDmT,male,3,6.203609999999999,+ T
+Canary,SDmT,male,4,7.84272,+ T
+Canary,SDmT,male,5,8.17164,+ T
+Canary,SDmT,male,6,9.333620000000002,+ T

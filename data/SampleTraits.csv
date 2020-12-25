@@ -1,0 +1,131 @@
+ori,NewName,Species,Season,Sex,Testo,Tissue,Group,Group_tissue
+150423_SD_f_Can_T14d_Ento_797L.CEL,SDfT_E_797L,CAN,SD,female,Testo,Ento,non-breeding female + T     ,non-breeding female + T     _Ento
+150423_SD_f_Can_T14d_Ento_798L.CEL,SDfT_E_798L,CAN,SD,female,Testo,Ento,non-breeding female + T     ,non-breeding female + T     _Ento
+150423_SD_f_Can_T14d_Ento_799L.CEL,SDfT_E_799L,CAN,SD,female,Testo,Ento,non-breeding female + T     ,non-breeding female + T     _Ento
+150423_SD_f_Can_T14d_Ento_803R.CEL,SDfT_E_803R,CAN,SD,female,Testo,Ento,non-breeding female + T     ,non-breeding female + T     _Ento
+150423_SD_f_Can_T14d_Ento_804R.CEL,SDfT_E_804R,CAN,SD,female,Testo,Ento,non-breeding female + T     ,non-breeding female + T     _Ento
+150423_SD_f_Can_T14d_Ento_805R.CEL,SDfT_E_805R,CAN,SD,female,Testo,Ento,non-breeding female + T     ,non-breeding female + T     _Ento
+150423_SD_f_Can_T14d_HVC_797L.CEL,SDfT_H_797L,CAN,SD,female,Testo,HVC,non-breeding female + T     ,non-breeding female + T     _HVC
+150423_SD_f_Can_T14d_HVC_798L.CEL,SDfT_H_798L,CAN,SD,female,Testo,HVC,non-breeding female + T     ,non-breeding female + T     _HVC
+150423_SD_f_Can_T14d_HVC_799L.CEL,SDfT_H_799L,CAN,SD,female,Testo,HVC,non-breeding female + T     ,non-breeding female + T     _HVC
+150423_SD_f_Can_T14d_HVC_803R.CEL,SDfT_H_803R,CAN,SD,female,Testo,HVC,non-breeding female + T     ,non-breeding female + T     _HVC
+150423_SD_f_Can_T14d_HVC_804R.CEL,SDfT_H_804R,CAN,SD,female,Testo,HVC,non-breeding female + T     ,non-breeding female + T     _HVC
+150423_SD_f_Can_T14d_HVC_805R.CEL,SDfT_H_805R,CAN,SD,female,Testo,HVC,non-breeding female + T     ,non-breeding female + T     _HVC
+151208_SD_f_Can_CTu1h_Ento_982R.CEL,SDf_E_982R,CAN,SD,female,Testo,Ento,non-breeding female,non-breeding female_Ento
+151208_SD_f_Can_CTu1h_HVC_986R.CEL,SDf_H_986R,CAN,SD,female,Testo,HVC,non-breeding female,non-breeding female_HVC
+160218_SD_f_Can_CTu1h_Ento_992L.CEL,SDf_E_992L,CAN,SD,female,Testo,Ento,non-breeding female,non-breeding female_Ento
+160218_SD_f_Can_CTu1h_HVC_992L.CEL,SDf_H_992L,CAN,SD,female,Testo,HVC,non-breeding female,non-breeding female_HVC
+160218_SD_f_Can_CTu1h_HVC_995L.CEL,SDf_H_995L,CAN,SD,female,Testo,HVC,non-breeding female,non-breeding female_HVC
+160225_SD_f_Can_CTu1h_Ento_984L.CEL,SDf_E_984L,CAN,SD,female,Testo,Ento,non-breeding female,non-breeding female_Ento
+160225_SD_f_Can_CTu1h_Ento_986L.CEL,SDf_E_986L,CAN,SD,female,Testo,Ento,non-breeding female,non-breeding female_Ento
+160225_SD_f_Can_CTu1h_Ento_995L.CEL,SDf_E_995L,CAN,SD,female,Testo,Ento,non-breeding female,non-breeding female_Ento
+160225_SD_f_Can_CTu1h_HVC_982L.CEL,SDf_H_982L,CAN,SD,female,Testo,HVC,non-breeding female,non-breeding female_HVC
+160225_SD_f_Can_CTu1h_HVC_984L.CEL,SDf_H_984L,CAN,SD,female,Testo,HVC,non-breeding female,non-breeding female_HVC
+Can_LD_female_ENT_689.CEL,LDf_E_689,CAN,LD,female,NA,Ento,breeding female,breeding female_Ento
+Can_LD_female_ENT_697.CEL,LDf_E_697,CAN,LD,female,NA,Ento,breeding female,breeding female_Ento
+Can_LD_female_ENT_724.CEL,LDf_E_724,CAN,LD,female,NA,Ento,breeding female,breeding female_Ento
+Can_LD_female_ENT_725.CEL,LDf_E_725,CAN,LD,female,NA,Ento,breeding female,breeding female_Ento
+Can_LD_female_ENT_730.CEL,LDf_E_730,CAN,LD,female,NA,Ento,breeding female,breeding female_Ento
+Can_LD_female_ENT_735.CEL,LDf_E_735,CAN,LD,female,NA,Ento,breeding female,breeding female_Ento
+Can_LD_female_HVC_689.CEL,LDf_H_689,CAN,LD,female,NA,HVC,breeding female,breeding female_HVC
+Can_LD_female_HVC_697.CEL,LDf_H_697,CAN,LD,female,NA,HVC,breeding female,breeding female_HVC
+Can_LD_female_HVC_724.CEL,LDf_H_724,CAN,LD,female,NA,HVC,breeding female,breeding female_HVC
+Can_LD_female_HVC_725.CEL,LDf_H_725,CAN,LD,female,NA,HVC,breeding female,breeding female_HVC
+Can_LD_female_HVC_730.CEL,LDf_H_730,CAN,LD,female,NA,HVC,breeding female,breeding female_HVC
+Can_LD_female_HVC_735.CEL,LDf_H_735,CAN,LD,female,NA,HVC,breeding female,breeding female_HVC
+Can_LD_male_ENT_32.CEL,LDm_E_32,CAN,LD,male,NA,Ento,breeding male      ,breeding male      _Ento
+Can_LD_male_ENT_34.CEL,LDm_E_34,CAN,LD,male,NA,Ento,breeding male      ,breeding male      _Ento
+Can_LD_male_ENT_35.CEL,LDm_E_35,CAN,LD,male,NA,Ento,breeding male      ,breeding male      _Ento
+Can_LD_male_ENT_36.CEL,LDm_E_36,CAN,LD,male,NA,Ento,breeding male      ,breeding male      _Ento
+Can_LD_male_ENT_37.CEL,LDm_E_37,CAN,LD,male,NA,Ento,breeding male      ,breeding male      _Ento
+Can_LD_male_ENT_38.CEL,LDm_E_38,CAN,LD,male,NA,Ento,breeding male      ,breeding male      _Ento
+Can_LD_male_HVC_1.CEL,LDm_H_1,CAN,LD,male,NA,HVC,breeding male      ,breeding male      _HVC
+Can_LD_male_HVC_172.CEL,LDm_H_172,CAN,LD,male,NA,HVC,breeding male      ,breeding male      _HVC
+Can_LD_male_HVC_22.CEL,LDm_H_22,CAN,LD,male,NA,HVC,breeding male      ,breeding male      _HVC
+Can_LD_male_HVC_3.CEL,LDm_H_3,CAN,LD,male,NA,HVC,breeding male      ,breeding male      _HVC
+Can_LD_male_HVC_4.CEL,LDm_H_4,CAN,LD,male,NA,HVC,breeding male      ,breeding male      _HVC
+Can_LD_male_HVC_5.CEL,LDm_H_5,CAN,LD,male,NA,HVC,breeding male      ,breeding male      _HVC
+Can_SD_female_NatSing_Ento_958R.CEL,SDfS_E_958R,CAN,SD,female,NA,Ento,non-breeding female      ,non-breeding female      _Ento
+Can_SD_female_NatSing_Ento_959R.CEL,SDfS_E_959R,CAN,SD,female,NA,Ento,non-breeding female      ,non-breeding female      _Ento
+Can_SD_female_NatSing_Ento_960R.CEL,SDfS_E_960R,CAN,SD,female,NA,Ento,non-breeding female      ,non-breeding female      _Ento
+Can_SD_female_NatSing_Ento_961R.CEL,SDfS_E_961R,CAN,SD,female,NA,Ento,non-breeding female      ,non-breeding female      _Ento
+Can_SD_female_NatSing_Ento_962R.CEL,SDfS_E_962R,CAN,SD,female,NA,Ento,non-breeding female      ,non-breeding female      _Ento
+Can_SD_female_NatSing_Ento_963L.CEL,SDfS_E_963L,CAN,SD,female,NA,Ento,non-breeding female      ,non-breeding female      _Ento
+Can_SD_female_NatSing_HVC_958R.CEL,SDfS_H_958R,CAN,SD,female,NA,HVC,non-breeding female      ,non-breeding female      _HVC
+Can_SD_female_NatSing_HVC_959R.CEL,SDfS_H_959R,CAN,SD,female,NA,HVC,non-breeding female      ,non-breeding female      _HVC
+Can_SD_female_NatSing_HVC_960R.CEL,SDfS_H_960R,CAN,SD,female,NA,HVC,non-breeding female      ,non-breeding female      _HVC
+Can_SD_female_NatSing_HVC_961R.CEL,SDfS_H_961R,CAN,SD,female,NA,HVC,non-breeding female      ,non-breeding female      _HVC
+Can_SD_female_NatSing_HVC_962R.CEL,SDfS_H_962R,CAN,SD,female,NA,HVC,non-breeding female      ,non-breeding female      _HVC
+Can_SD_female_NatSing_HVC_963L.CEL,SDfS_H_963L,CAN,SD,female,NA,HVC,non-breeding female      ,non-breeding female      _HVC
+Can_SD_male_ENT_1.CEL,SDm_E_1,CAN,SD,male,NA,Ento,non-breeding male,non-breeding male_Ento
+Can_SD_male_ENT_2.CEL,SDm_E_2,CAN,SD,male,NA,Ento,non-breeding male,non-breeding male_Ento
+Can_SD_male_ENT_3.CEL,SDm_E_3,CAN,SD,male,NA,Ento,non-breeding male,non-breeding male_Ento
+Can_SD_male_ENT_4.CEL,SDm_E_4,CAN,SD,male,NA,Ento,non-breeding male,non-breeding male_Ento
+Can_SD_male_ENT_5.CEL,SDm_E_5,CAN,SD,male,NA,Ento,non-breeding male,non-breeding male_Ento
+Can_SD_male_ENT_6.CEL,SDm_E_6,CAN,SD,male,NA,Ento,non-breeding male,non-breeding male_Ento
+Can_SD_male_HVC_1.CEL,SDm_H_1,CAN,SD,male,NA,HVC,non-breeding male,non-breeding male_HVC
+Can_SD_male_HVC_2.CEL,SDm_H_2,CAN,SD,male,NA,HVC,non-breeding male,non-breeding male_HVC
+Can_SD_male_HVC_3.CEL,SDm_H_3,CAN,SD,male,NA,HVC,non-breeding male,non-breeding male_HVC
+Can_SD_male_HVC_4.CEL,SDm_H_4,CAN,SD,male,NA,HVC,non-breeding male,non-breeding male_HVC
+Can_SD_male_HVC_5.CEL,SDm_H_5,CAN,SD,male,NA,HVC,non-breeding male,non-breeding male_HVC
+Can_SD_male_HVC_6.CEL,SDm_H_6,CAN,SD,male,NA,HVC,non-breeding male,non-breeding male_HVC
+Can_SDmT_ENT_2.CEL,SDmT_E_2,CAN,SD,male,Testo,Ento,non-breeding male + T      ,non-breeding male + T      _Ento
+Can_SDmT_ENT_3.CEL,SDmT_E_3,CAN,SD,male,Testo,Ento,non-breeding male + T      ,non-breeding male + T      _Ento
+Can_SDmT_ENT_4.CEL,SDmT_E_4,CAN,SD,male,Testo,Ento,non-breeding male + T      ,non-breeding male + T      _Ento
+Can_SDmT_ENT_5.CEL,SDmT_E_5,CAN,SD,male,Testo,Ento,non-breeding male + T      ,non-breeding male + T      _Ento
+Can_SDmT_ENT_6.CEL,SDmT_E_6,CAN,SD,male,Testo,Ento,non-breeding male + T      ,non-breeding male + T      _Ento
+Can_SDmT_ENT_7.CEL,SDmT_E_7,CAN,SD,male,Testo,Ento,non-breeding male + T      ,non-breeding male + T      _Ento
+Can_SDmT_HVC_2.CEL,SDmT_H_2,CAN,SD,male,Testo,HVC,non-breeding male + T      ,non-breeding male + T      _HVC
+Can_SDmT_HVC_3.CEL,SDmT_H_3,CAN,SD,male,Testo,HVC,non-breeding male + T      ,non-breeding male + T      _HVC
+Can_SDmT_HVC_4.CEL,SDmT_H_4,CAN,SD,male,Testo,HVC,non-breeding male + T      ,non-breeding male + T      _HVC
+Can_SDmT_HVC_5.CEL,SDmT_H_5,CAN,SD,male,Testo,HVC,non-breeding male + T      ,non-breeding male + T      _HVC
+Can_SDmT_HVC_6.CEL,SDmT_H_6,CAN,SD,male,Testo,HVC,non-breeding male + T      ,non-breeding male + T      _HVC
+Can_SDmT_HVC_7.CEL,SDmT_H_7,CAN,SD,male,Testo,HVC,non-breeding male + T      ,non-breeding male + T      _HVC
+CB_female_ENT_80.CEL,CBf_E_80,CB,LD,female,NA,Ento,Cordon-bleu female,Cordon-bleu female_Ento
+CB_female_ENT_83.CEL,CBf_E_83,CB,LD,female,NA,Ento,Cordon-bleu female,Cordon-bleu female_Ento
+CB_female_ENT_85.CEL,CBf_E_85,CB,LD,female,NA,Ento,Cordon-bleu female,Cordon-bleu female_Ento
+CB_female_ENT_87.CEL,CBf_E_87,CB,LD,female,NA,Ento,Cordon-bleu female,Cordon-bleu female_Ento
+CB_female_ENT_89.CEL,CBf_E_89,CB,LD,female,NA,Ento,Cordon-bleu female,Cordon-bleu female_Ento
+CB_female_ENT_91.CEL,CBf_E_91,CB,LD,female,NA,Ento,Cordon-bleu female,Cordon-bleu female_Ento
+CB_female_HVC_80.CEL,CBf_H_80,CB,LD,female,NA,HVC,Cordon-bleu female,Cordon-bleu female_HVC
+CB_female_HVC_83.CEL,CBf_H_83,CB,LD,female,NA,HVC,Cordon-bleu female,Cordon-bleu female_HVC
+CB_female_HVC_89.CEL,CBf_H_89,CB,LD,female,NA,HVC,Cordon-bleu female,Cordon-bleu female_HVC
+CB_female_HVC_91.CEL,CBf_H_91,CB,LD,female,NA,HVC,Cordon-bleu female,Cordon-bleu female_HVC
+CB_female_HVC_92.CEL,CBf_H_92,CB,LD,female,NA,HVC,Cordon-bleu female,Cordon-bleu female_HVC
+CB_female_HVC_93.CEL,CBf_H_93,CB,LD,female,NA,HVC,Cordon-bleu female,Cordon-bleu female_HVC
+CB_male_ENT_81.CEL,CBm_E_81,CB,LD,male,NA,Ento,Cordon-bleu male,Cordon-bleu male_Ento
+CB_male_ENT_82.CEL,CBm_E_82,CB,LD,male,NA,Ento,Cordon-bleu male,Cordon-bleu male_Ento
+CB_male_ENT_84.CEL,CBm_E_84,CB,LD,male,NA,Ento,Cordon-bleu male,Cordon-bleu male_Ento
+CB_male_ENT_86.CEL,CBm_E_86,CB,LD,male,NA,Ento,Cordon-bleu male,Cordon-bleu male_Ento
+CB_male_ENT_88.CEL,CBm_E_88,CB,LD,male,NA,Ento,Cordon-bleu male,Cordon-bleu male_Ento
+CB_male_ENT_90.CEL,CBm_E_90,CB,LD,male,NA,Ento,Cordon-bleu male,Cordon-bleu male_Ento
+CB_male_HVC_81.CEL,CBm_H_81,CB,LD,male,NA,HVC,Cordon-bleu male,Cordon-bleu male_HVC
+CB_male_HVC_82.CEL,CBm_H_82,CB,LD,male,NA,HVC,Cordon-bleu male,Cordon-bleu male_HVC
+CB_male_HVC_84.CEL,CBm_H_84,CB,LD,male,NA,HVC,Cordon-bleu male,Cordon-bleu male_HVC
+CB_male_HVC_86.CEL,CBm_H_86,CB,LD,male,NA,HVC,Cordon-bleu male,Cordon-bleu male_HVC
+CB_male_HVC_88.CEL,CBm_H_88,CB,LD,male,NA,HVC,Cordon-bleu male,Cordon-bleu male_HVC
+CB_male_HVC_90.CEL,CBm_H_90,CB,LD,male,NA,HVC,Cordon-bleu male,Cordon-bleu male_HVC
+FW_female_ENT_12-9.CEL,FWf_E_12-9,FW,LD,female,NA,Ento,Forest weaver female,Forest weaver female_Ento
+FW_female_ENT_13.CEL,FWf_E_13,FW,LD,female,NA,Ento,Forest weaver female,Forest weaver female_Ento
+FW_female_ENT_17.CEL,FWf_E_17,FW,LD,female,NA,Ento,Forest weaver female,Forest weaver female_Ento
+FW_female_ENT_2.CEL,FWf_E_2,FW,LD,female,NA,Ento,Forest weaver female,Forest weaver female_Ento
+FW_female_ENT_5.CEL,FWf_E_5,FW,LD,female,NA,Ento,Forest weaver female,Forest weaver female_Ento
+FW_female_ENT_8.CEL,FWf_E_8,FW,LD,female,NA,Ento,Forest weaver female,Forest weaver female_Ento
+FW_female_HVC_13.CEL,FWf_H_13,FW,LD,female,NA,HVC,Forest weaver female,Forest weaver female_HVC
+FW_female_HVC_17-2.CEL,FWf_H_17-2,FW,LD,female,NA,HVC,Forest weaver female,Forest weaver female_HVC
+FW_female_HVC_2.CEL,FWf_H_2,FW,LD,female,NA,HVC,Forest weaver female,Forest weaver female_HVC
+FW_female_HVC_4.CEL,FWf_H_4,FW,LD,female,NA,HVC,Forest weaver female,Forest weaver female_HVC
+FW_female_HVC_5-2.CEL,FWf_H_5-2,FW,LD,female,NA,HVC,Forest weaver female,Forest weaver female_HVC
+FW_female_HVC_8-2.CEL,FWf_H_8-2,FW,LD,female,NA,HVC,Forest weaver female,Forest weaver female_HVC
+FW_male_ENT_10.CEL,FWm_E_10,FW,LD,male,NA,Ento,Forest weaver male,Forest weaver male_Ento
+FW_male_ENT_14.CEL,FWm_E_14,FW,LD,male,NA,Ento,Forest weaver male,Forest weaver male_Ento
+FW_male_ENT_18.CEL,FWm_E_18,FW,LD,male,NA,Ento,Forest weaver male,Forest weaver male_Ento
+FW_male_ENT_3.CEL,FWm_E_3,FW,LD,male,NA,Ento,Forest weaver male,Forest weaver male_Ento
+FW_male_ENT_6.CEL,FWm_E_6,FW,LD,male,NA,Ento,Forest weaver male,Forest weaver male_Ento
+FW_male_ENT_7.CEL,FWm_E_7,FW,LD,male,NA,Ento,Forest weaver male,Forest weaver male_Ento
+FW_male_HVC_1.CEL,FWm_H_1,FW,LD,male,NA,HVC,Forest weaver male,Forest weaver male_HVC
+FW_male_HVC_12.CEL,FWm_H_12,FW,LD,male,NA,HVC,Forest weaver male,Forest weaver male_HVC
+FW_male_HVC_14.CEL,FWm_H_14,FW,LD,male,NA,HVC,Forest weaver male,Forest weaver male_HVC
+FW_male_HVC_18.CEL,FWm_H_18,FW,LD,male,NA,HVC,Forest weaver male,Forest weaver male_HVC
+FW_male_HVC_6.CEL,FWm_H_6,FW,LD,male,NA,HVC,Forest weaver male,Forest weaver male_HVC
+FW_male_HVC_7.CEL,FWm_H_7,FW,LD,male,NA,HVC,Forest weaver male,Forest weaver male_HVC
