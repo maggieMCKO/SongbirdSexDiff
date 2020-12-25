@@ -1,0 +1,117 @@
+---
+title: "Plot HVC volume and do stats"
+output: html_notebook
+author: "MaggieMCKO"
+date: "12/25/2020"
+---
+
+This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.1 of the [sex difference manuscript] ().
+
+```{r}
+library(tidyverse) # v.1.3.0
+
+## load data
+path =  paste0(getwd(), "/data/HVC_volume.csv")
+H = read_csv(path)
+
+H$Species = factor(H$Species, levels = c("Forest weaver", "Cordon bleu", "Canary"))
+H$Group = factor(H$Group, levels = c("FWm", "FWf", "CBm", "CBf", 
+                                     "LDm", "LDf", "SDm", "SDf", "SDfS", 
+                                     "SDmT", "SDfT"))
+
+## plot
+w = 0.2
+
+HVCb = ggplot(H, aes(y = HVC.Volume..mm3., x = Group)) + 
+  geom_boxplot(outlier.colour = 'white', outlier.size = 0.5, width = 0.2,
+               size = 0.3) +
+  facet_grid(. ~ Species, space = "free", scales = "free") +
+  geom_point(aes(x = Group, y = HVC.Volume..mm3., color = Sex),
+             position = position_nudge(x = w), size = 0.5) +
+
+  scale_color_manual(values = c("mediumpurple1", "dodgerblue1")) +
+  scale_y_continuous(name = expression(HVC*" "*volume*" ("*mm^3*")")) +
+  theme(panel.background = element_blank(),
+        plot.background = element_blank(), 
+        plot.title =  element_blank(), 
+        panel.border =  element_blank(), 
+        panel.grid = element_blank(),
+        axis.line = element_line(color = "black", size = .2),
+        axis.title.x = element_blank(),
+        axis.ticks = element_line(colour = "black", size = 0.05),
+        strip.text = element_text(margin = margin(1,1,1,1, unit = 'pt') ),
+        legend.background = element_blank(),
+        legend.key = element_blank(),
+        legend.title = element_blank(),
+        legend.text = element_text(colour = "black", size = 5),
+        legend.position = c(0.9, 0.9)); HVCb
+
+```
+
+# Mann-Whitney Test
+### Forest weaver males vs females
+```{r}
+tmp = H %>% filter(grepl("FW", Group))
+# head(tmp)
+
+# Mann-Whitney Test
+wilcox.test(HVC.Volume..mm3. ~ Sex , data = tmp, alternative = "two.sided") 
+# cal mean 
+tmp %>% group_by(Sex) %>% summarise(mean = mean(HVC.Volume..mm3.))
+
+```
+### Cordon bleu males vs females
+```{r}
+tmp = H %>% filter(grepl("CB", Group))
+# head(tmp)
+
+# Mann-Whitney Test
+wilcox.test(HVC.Volume..mm3. ~ Sex , data = tmp, alternative = "two.sided") 
+# cal mean 
+tmp %>% group_by(Sex) %>% summarise(mean = mean(HVC.Volume..mm3.))
+
+```
+
+### Breeding canay males vs females
+```{r}
+tmp = H %>% filter(grepl("LD", Group))
+# head(tmp)
+
+# Mann-Whitney Test
+wilcox.test(HVC.Volume..mm3. ~ Sex , data = tmp, alternative = "two.sided") 
+# cal mean 
+tmp %>% group_by(Sex) %>% summarise(mean = mean(HVC.Volume..mm3.))
+```
+
+### Non-breeding males vs non-breeding non-singing females
+```{r}
+tmp = H %>% filter(grepl("SDm$|SDf$", Group))
+# head(tmp)
+
+# Mann-Whitney Test
+wilcox.test(HVC.Volume..mm3. ~ Sex , data = tmp, alternative = "two.sided") 
+# cal mean 
+tmp %>% group_by(Sex) %>% summarise(mean = mean(HVC.Volume..mm3.))
+```
+
+### Non-breeding males vs non-breeding singing females
+```{r}
+tmp = H %>% filter(grepl("SDm$|SDfS", Group))
+# head(tmp)
+
+# Mann-Whitney Test
+wilcox.test(HVC.Volume..mm3. ~ Sex , data = tmp, alternative = "two.sided") 
+# cal mean 
+tmp %>% group_by(Sex) %>% summarise(mean = mean(HVC.Volume..mm3.))
+```
+### Testosterone-implanted male canaries vs female canaries
+```{r}
+tmp = H %>% filter(grepl("T", Group))
+# head(tmp)
+
+# Mann-Whitney Test
+wilcox.test(HVC.Volume..mm3. ~ Sex , data = tmp, alternative = "two.sided") 
+
+# cal mean
+tmp %>% group_by(Sex) %>% summarise(mean = mean(HVC.Volume..mm3., na.rm = T))
+```

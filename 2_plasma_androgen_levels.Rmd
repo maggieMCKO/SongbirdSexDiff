@@ -1,0 +1,190 @@
+---
+title: "Plot plasma androgen levels and do stats"
+output: html_notebook
+author: "MaggieMCKO"
+date: "12/25/2020"
+---
+
+This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.1 of the [sex difference manuscript] ().
+
+
+```{r}
+
+library(tidyverse) # v.1.3.0
+
+## load data
+path =  paste0(getwd(), "/data/Plasma_androgen_conc.csv")
+Testo = read_csv(path)
+
+Testo$Group = factor(Testo$Group, 
+                           levels = c("LDm", "SDm", "LDf", "SDf", "SDmT", "SDfT", "SDfS" ))
+Testo$Facet = factor(Testo$Facet, levels = c("Breeding", "Non-breeding", "+ T"))
+
+# plot
+w = 0.2
+TESTOb_post = ggplot(Testo, aes(y = Testo..ng.ml., x = Group)) + 
+  geom_boxplot(outlier.colour = 'white', outlier.size = 0.5, width = 0.2,
+               size = 0.3) + 
+  geom_point(aes(color = Sex), position = position_nudge(x = w), size = 0.5) +
+  scale_color_manual(values = c("mediumpurple1", "dodgerblue1")) +
+  facet_grid(. ~ Facet, scales = "free", space = "free") +
+  scale_y_log10(name = 'Plasma androgens (ng/ml)') +
+  theme(panel.background = element_blank(),
+        plot.background = element_blank(), 
+        plot.title =  element_blank(), 
+        panel.border =  element_blank(), 
+        panel.grid = element_blank(),
+        axis.line = element_line(color = "black", size = .2),
+        axis.title.x = element_blank(),
+        axis.ticks = element_line(colour = "black", size = 0.05),
+        strip.text = element_text(margin = margin(1,1,1,1, unit = 'pt') ),
+        legend.background = element_blank(),
+        legend.key = element_blank(),
+        legend.title = element_blank(),
+        legend.text = element_text(colour = "black", size = 5),
+        legend.position = c(0.9, 0.2)); TESTOb_post
+
+```
+# Mann-Whitney Test
+### 1. Breeding canay males vs females
+```{r}
+tmp = Testo %>% filter(Facet == 'Breeding')
+# head(tmp)
+
+# Mann-Whitney Test
+w = wilcox.test(Testo..ng.ml. ~ Sex , data = tmp, alternative = "two.sided")
+print(w)
+
+# cal mean 
+tmp %>% group_by(Sex) %>% summarise(mean = mean(Testo..ng.ml.))
+
+pval_LDm_LDf = w$p.value
+
+```
+### 2. Non-breeding males vs non-breeding non-singing females
+```{r}
+tmp = Testo %>% filter(grepl("SDm$|SDf$", Group))
+# head(tmp)
+
+# Mann-Whitney Test
+w = wilcox.test(Testo..ng.ml. ~ Sex , data = tmp, alternative = "two.sided")
+print(w)
+
+# cal mean 
+tmp %>% group_by(Sex) %>% summarise(mean = mean(Testo..ng.ml.))
+
+pval_SDm_SDf = w$p.value
+```
+
+
+### 3. Non-breeding males vs non-breeding singing females
+```{r}
+tmp = Testo %>% filter(grepl("SDm$|SDfS$", Group))
+# head(tmp)
+
+# Mann-Whitney Test
+w = wilcox.test(Testo..ng.ml. ~ Sex , data = tmp, alternative = "two.sided")
+print(w)
+
+# cal mean 
+tmp %>% group_by(Sex) %>% summarise(mean = mean(Testo..ng.ml.))
+
+pval_SDm_SDfS = w$p.value
+
+```
+
+### 4. Testosterone-implanted males vs testosterone-implanted females
+```{r}
+tmp = Testo %>% filter(Facet == '+ T')
+# head(tmp)
+
+# Mann-Whitney Test
+w = wilcox.test(Testo..ng.ml. ~ Sex , data = tmp, alternative = "two.sided")
+print(w)
+# cal mean 
+tmp %>% group_by(Sex) %>% summarise(mean = mean(Testo..ng.ml.))
+
+pval_SDmT_SDfT = w$p.value
+
+```
+
+### 5. Testosterone-implanted males vs non-breeding non-singinge males
+```{r}
+tmp = Testo %>% filter(grepl('SDm$|SDmT$', Group))
+# head(tmp)
+
+# Mann-Whitney Test
+w = wilcox.test(Testo..ng.ml. ~ Group , data = tmp, alternative = "two.sided")
+print(w)
+# cal mean 
+tmp %>% group_by(Group) %>% summarise(mean = mean(Testo..ng.ml.))
+
+pval_SDmT_SDm = w$p.value
+
+```
+
+### 6. Testosterone-implanted females vs non-breeding non-singinge females
+```{r}
+tmp = Testo %>% filter(grepl('SDf$|SDfT$', Group))
+# head(tmp)
+
+# Mann-Whitney Test
+w = wilcox.test(Testo..ng.ml. ~ Group , data = tmp, alternative = "two.sided")
+print(w)
+
+# cal mean 
+tmp %>% group_by(Group) %>% summarise(mean = mean(Testo..ng.ml.))
+
+pval_SDfT_SDf = w$p.value
+
+```
+
+### 7. Breeding males vs testosterone-implanted males
+```{r}
+tmp = Testo %>% filter(grepl('LDm$|SDmT$', Group))
+# head(tmp)
+
+# Mann-Whitney Test
+w = wilcox.test(Testo..ng.ml. ~ Group , data = tmp, alternative = "two.sided")
+print(w)
+
+# cal mean 
+tmp %>% group_by(Group) %>% summarise(mean = mean(Testo..ng.ml.))
+
+pval_LDm_SDmT = w$p.value
+
+```
+
+
+### 8. Breeding males vs non-breeding non-singing males
+```{r}
+tmp = Testo %>% filter(grepl('LDm$|SDm$', Group))
+# head(tmp)
+
+# Mann-Whitney Test
+w = wilcox.test(Testo..ng.ml. ~ Group , data = tmp, alternative = "two.sided")
+print(w)
+
+# cal mean 
+tmp %>% group_by(Group) %>% summarise(mean = mean(Testo..ng.ml.))
+
+pval_LDm_SDm = w$p.value
+
+```
+
+### adjusted p values
+```{r}
+pvals = c("pval_LDm_LDf" = pval_LDm_LDf, 
+          "pval_SDm_SDf" = pval_SDm_SDf, "pval_SDm_SDfS" = pval_SDm_SDfS, 
+          "pval_SDmT_SDfT" = pval_SDmT_SDfT, 
+          "pval_SDmT_SDm" = pval_SDmT_SDm, "pval_SDfT_SDf" = pval_SDfT_SDf,
+          "pval_LDm_SDm" = pval_LDm_SDm, "pval_LDm_SDmT"= pval_LDm_SDmT
+          )
+
+
+padj = p.adjust(pvals, "bonferroni")
+
+df = data.frame(pvals, padj)
+print(df)
+```
+
