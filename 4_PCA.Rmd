@@ -1,0 +1,173 @@
+---
+title: "Hierarchical clustering"
+output: html_notebook
+author: "MaggieMCKO"
+date: "12/25/2020"
+---
+
+This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.1 of the [sex difference manuscript] ().
+
+### PCA
+```{r}
+library(tidyverse)  # v.1.3.0
+library(pcaMethods) # v1.80.0
+library(grid)       # v4.0.2
+library(gridExtra)  # v2.3
+
+## load data
+csv_path =  paste0(getwd(), "/data/SampleTraits.csv")
+sub = read_csv(csv_path)
+
+csv_path = paste0(getwd(), "/data/Normalized_gene_expression.csv")
+collapse_gene = read_csv(csv_path)
+
+## get HVC samples
+sub = sub %>% filter(Tissue == "HVC", Species == "CAN") %>%
+  mutate(Group = gsub("(.*)_H_(\\d+).*", "\\1", NewName),
+         ID = paste0(Group, "_", gsub(".*_(\\d+).*", "\\1", NewName)))
+
+## take gene data of wanted samples
+su_samples = sub$NewName # 41
+ind_col = sapply(su_samples, function(s){which(names(collapse_gene) == s)}) # 41
+
+## transpose
+dat = collapse_gene[, unlist(ind_col)] %>% t()
+row.names(dat) = sub$ID               # sample
+colnames(dat) = collapse_gene$group   # gene
+dim(dat) # 41 12360
+dat[1:3, 1:3]
+
+## pca
+mydata.pca = pca(dat, method = "svd", nPcs=nrow(dat), center=TRUE, scale="none", cv = "q2", seed=123)
+mydata.pca@R2cum
+# biplot(mydata.pca)
+
+# score
+pca_score = cbind('ori' = row.names(dat), "Group" = sub$Group, mydata.pca@scores) %>% as_tibble()
+unique(pca_score$Group)
+pca_score$Group = factor(pca_score$Group, levels = c("LDf", "LDm", "SDf", "SDm", "SDfS", "SDfT", "SDmT"))
+pca_score[ , -c(1:2)] = sapply(pca_score[ , -c(1:2)], FUN = function(s){as.numeric(as.character(s))})
+
+# loading
+pca_loading = cbind('Gene' = row.names(mydata.pca@loadings), mydata.pca@loadings) %>% as_tibble()
+pca_loading[ , -c(1)] = sapply(pca_loading[ , -c(1)], FUN = function(s){as.numeric(as.character(s))})
+
+```
+
+#### Fig. 1C biplot
+```{r}
+
+# color palate
+cbPalette_ori = c("plum1", "dodgerblue4", "deeppink", "palegreen", "darkred", "brown1", "deepskyblue") # "LDf", "LDm", "SDf", "SDm", "SDfS", "SDfT", "SDmT"
+
+
+ggplot(data=pca_score, aes(x = PC1, y = PC2, color = Group), environment = environment()) + 
+  geom_point( size = 3, shape = 20, alpha = .6) + 
+  guides(colour = guide_legend(title = "Group", keyheight = .2, ncol = 4, byrow = T,
+                               override.aes = list(size=2.5, alpha = .8))) + 
+  scale_colour_manual(values=cbPalette_ori) +
+  xlab(paste0("PC", 1, " (", format(mydata.pca@R2[1]*100, 2), "%) ")) + 
+      ylab(paste0("PC", 2, " (", format(mydata.pca@R2[2]*100, 2), "%) ")) +
+  theme_bw() + 
+  theme(legend.position="right",
+        legend.key = element_blank()) 
+
+```
+
+#### Fig. S4
+```{r}
+percent <- round(100*mydata.pca@R2, digits = 4) 
+percentcum <- round(100*mydata.pca@R2cum, digits = 4) 
+
+perc_data  <- as.data.frame(cbind("PC" = paste0("PC", 1:mydata.pca@nPcs), "percent" = percent, "percentcum" = percentcum))
+perc_data[, 2:3] <- sapply(perc_data[,2:3], function(s){as.numeric(as.character(s))})
+
+perc_data$PC <- factor(perc_data$PC, levels = paste0("PC", 1:length(percent)))
+
+p =  ggplot(perc_data, aes(x=PC)) +   
+  geom_bar(aes(y=percentcum), stat="identity", fill = "#00CED1") + 
+  geom_text(aes(y=percentcum, label=round(percentcum, digits = 1)), size= 1.7, vjust=-.5) + #size = 3
+  geom_bar(aes(y=percent), stat="identity", fill = "#FF4040") + 
+  geom_text(aes(y=percent, label=round(percent, digits = 1)), size= 1.7, vjust=-.5) + #size = 3
+  geom_hline(yintercept=80, colour="gray", linetype = 2, size = .5) +
+  #   scale_x_continuous(breaks=1:length(percent)) + # make sure each PC gets an axis tick (used when dataframe is old)
+  scale_y_continuous(breaks=seq(0, 110, by = 20), expand = c(0, 0), limits = c(0, 110)) +
+  ylab(paste0("Explained variance (%)")) +
+  theme_bw() + 
+  theme(#axis.line = element_line(colour = "black"),
+    panel.background = element_blank(),
+    panel.grid = element_blank(),
+    panel.border = element_rect(size =.2),
+    plot.background = element_blank(),
+    legend.position="none",
+    axis.ticks = element_line(size = .2), 
+    axis.text.x = element_text(size = 6, angle = 315),
+    axis.text.y = element_text(size = 6), #8
+    axis.title.x = element_blank(),
+    axis.title.y = element_text(size = 6, vjust=1)); p
+
+```
+
+#### Fig. S4
+```{r}
+
+## load data
+path =  paste0(getwd(), "/data/HVC_volume.csv")
+H = read_csv(path) %>%
+  filter(Species == "Canary") %>%
+  mutate(ID = as.character(ID)) %>%
+  select(Group, ID, `HVC.Volume..mm3.`)
+
+H$Group = factor(H$Group, levels = c("LDm", "LDf", "SDm", "SDf", "SDfS", 
+                                     "SDmT", "SDfT"))
+
+## load data
+path =  paste0(getwd(), "/data/Plasma_androgen_conc.csv")
+Testo = read_csv(path) %>%
+  mutate(ID = gsub("(.*)[RL]", "\\1", ID)) %>%
+  select(Group, ID, `Testo..ng.ml.`)
+
+Testo$Group = factor(Testo$Group, 
+                           levels = c("LDm", "SDm", "LDf", "SDf", "SDmT", "SDfT", "SDfS" ))
+# Testo$Facet = factor(Testo$Facet, levels = c("Breeding", "Non-breeding", "+ T"))
+
+
+## sample traits
+sub_m = sub %>% 
+  mutate(ind = gsub(".*_(\\d+).*", "\\1", NewName)) %>%
+  left_join(H, by = c("ind" = "ID", "Group" = "Group")) %>%
+  left_join(Testo, by = c("ind" = "ID", "Group" = "Group")) %>%
+  mutate(sex_n = ifelse(grepl("female", Sex), 0, 1),
+         singing = ifelse(Group %in% c("LDm", "SDfS", "SDfT", "SDmT"), 1, 0))
+
+
+## correlation
+names(sub_m)
+ind.for.trait = sapply(row.names(mydata.pca@scores), function(s){ind = which(sub_m$ID == s)})
+sub_s = sub_m[ind.for.trait, c("Testo..ng.ml.", "HVC.Volume..mm3.", "sex_n", "singing")] %>%
+  as.matrix()
+# sub_s = sapply(sub_s , function(s){as.numeric(as.character(s))})
+str(sub_s)
+
+correlations <- cor(mydata.pca@scores, sub_s, use = 'pairwise.complete.obs')
+correlations.T = apply(X = mydata.pca@scores, MARGIN = 2, function(s){
+  x = cor.test(s, sub_s[, 1])$p.value; 
+  p.adjust(x, "bonferroni")})
+correlations.HVC = apply(X = mydata.pca@scores, MARGIN = 2, function(s){
+  x = cor.test(s, sub_s[,2])$p.value; 
+  p.adjust(x, "bonferroni")})
+correlations.sex = apply(X = mydata.pca@scores, MARGIN = 2, function(s){
+  x = cor.test(s, sub_s[,3])$p.value; 
+  p.adjust(x, "bonferroni")})
+correlations.singing = apply(X = mydata.pca@scores, MARGIN = 2, function(s){
+  x = cor.test(s, sub_s[,4])$p.value; 
+  p.adjust(x, "bonferroni")})
+
+correlations.a = cbind(row.names(correlations), as.data.frame(correlations), 
+                       "padj.HVC" = correlations.HVC, "padj.T" = correlations.T, 
+                       "padj.sex" = correlations.sex, "padj.singing" = correlations.singing)
+names(correlations.a)
+names(correlations.a)[1:3] = c("PC", "Plasma androgen (pg/ml)", "HVC volume (mm3)")
+print(correlations.a)
+
+```

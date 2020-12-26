@@ -19,7 +19,7 @@ csv_path = paste0(getwd(), "/data/Normalized_gene_expression.csv")
 collapse_gene = read_csv(csv_path)
 
 ## get HVC samples
-sub = subset(sub, su = Tissue == "HVC")
+sub = sub %>% filter(Tissue == "HVC")
 
 ## take gene data of wanted samples
 su_samples = sub$NewName # 65
@@ -66,7 +66,7 @@ csv_path = paste0(getwd(), "/data/Normalized_gene_expression.csv")
 collapse_gene = read_csv(csv_path)
 
 ## get HVC samples
-sub = subset(sub, su = Tissue == "HVC")
+sub = sub %>% filter(Tissue == "HVC")
 
 ## take gene data of wanted samples
 su_samples = sub$NewName # 65
@@ -126,8 +126,8 @@ sub = read_csv(csv_path)
 csv_path = paste0(getwd(), "/data/Normalized_gene_expression.csv")
 collapse_gene = read_csv(csv_path)
 
-## get HVC samples
-sub = subset(sub, su = Tissue == "Ento")
+## get entopallium samples
+sub = sub %>% filter(Tissue == "Ento")
 
 ## take gene data of wanted samples
 su_samples = sub$NewName # 65
@@ -174,3 +174,7 @@ dend %>% set("labels_cex", 0.8) %>%
   color_branches(col = branch_col) %>%
   plot(xlab="dissimilarity", horiz = TRUE, cex.axis= 0.8, cex.lab = 0.8)
 ```
+
+
+
+
