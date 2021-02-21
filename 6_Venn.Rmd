@@ -1,0 +1,61 @@
+---
+title: "Sex-biased genes"
+output: html_notebook
+author: "MaggieMCKO"
+date: "12/26/2020"
+---
+
+This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.1 of the [sex difference manuscript] ().
+
+### Fig.4A
+```{r}
+library(tidyverse)  # v.1.3.0
+library(gplots) # 3.0.4
+
+## load data
+csv_path =  paste0(getwd(), "/data/Differential_gene_expression_singingbirds.csv")
+gene_dat = read_csv(csv_path) 
+
+SDfS = gene_dat %>% filter(! is.na(SDfS)) %>%
+  select(GeneSymbol) %>% pull()
+SDfT = gene_dat %>% filter(! is.na(SDfT)) %>%
+  select(GeneSymbol) %>% pull()
+
+input = list("SDfS" = SDfS, "SDfT" = SDfT)
+tmp <- venn(input, intersections = T, small = 0.5)
+female_specific = attr(tmp, "intersections")[[3]]
+
+```
+
+### Fig.4B
+```{r}
+library(tidyverse)  # v.1.3.0
+library(gplots) # 3.0.4
+
+## load data
+csv_path =  paste0(getwd(), "/data/Differential_gene_expression_singingbirds.csv")
+gene_dat = read_csv(csv_path) 
+
+LDm = gene_dat %>% filter(! is.na(LDm)) %>%
+  select(GeneSymbol) %>% pull()
+SDmT = gene_dat %>% filter(! is.na(SDmT)) %>%
+  select(GeneSymbol) %>% pull()
+
+input = list("LDm" = LDm, "SDmT" = SDmT)
+tmp <- venn(input, intersections = T, small = 0.5)
+male_specific = attr(tmp, "intersections")[[3]]
+
+```
+
+### Fig.4C
+```{r}
+
+input = list("female_specific" = female_specific, 
+             "male_specific" = male_specific)
+tmp <- venn(input, intersections = T, small = 0.5)
+
+sex_shared = attr(tmp, "intersections")[[3]]
+
+```
+
+

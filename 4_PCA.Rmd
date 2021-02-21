@@ -1,11 +1,11 @@
 ---
-title: "Hierarchical clustering"
+title: "PCA analysis"
 output: html_notebook
 author: "MaggieMCKO"
 date: "12/25/2020"
 ---
 
-This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.1 of the [sex difference manuscript] ().
+This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.1C, Fig.S4, and TableS2 of the [sex difference manuscript] ().
 
 ### PCA
 ```{r}
@@ -54,11 +54,11 @@ pca_loading[ , -c(1)] = sapply(pca_loading[ , -c(1)], FUN = function(s){as.numer
 
 ```
 
-#### Fig. 1C biplot
+#### Fig. 1C 
 ```{r}
 
 # color palate
-cbPalette_ori = c("plum1", "dodgerblue4", "deeppink", "palegreen", "darkred", "brown1", "deepskyblue") # "LDf", "LDm", "SDf", "SDm", "SDfS", "SDfT", "SDmT"
+cbPalette_ori = c("plum1", "dodgerblue4", "deeppink", "darkolivegreen4", "darkred", "brown1", "deepskyblue") # "LDf", "LDm", "SDf", "SDm", "SDfS", "SDfT", "SDmT"
 
 
 ggplot(data=pca_score, aes(x = PC1, y = PC2, color = Group), environment = environment()) + 
@@ -108,7 +108,7 @@ p =  ggplot(perc_data, aes(x=PC)) +
 
 ```
 
-#### Fig. S4
+#### Table. S2
 ```{r}
 
 ## load data

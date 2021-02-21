@@ -1,0 +1,544 @@
+---
+title: "Sex-biased genes"
+output: html_notebook
+author: "MaggieMCKO"
+date: "12/26/2020"
+---
+
+This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.1 of the [sex difference manuscript] ().
+
+
+### Fig.2A
+```{r}
+library(tidyverse)  # v.1.3.0
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path)
+
+##### summary plot ====
+dat_summ_m = gene_dat %>% 
+  group_by(Group) %>%
+  summarise(`Male-biased` = sum(Male_biased), 
+            `Female-biased` = sum(Female_biased)) %>% 
+  pivot_longer(cols = `Male-biased`:`Female-biased`)
+
+dat_summ_m$Group <- factor(dat_summ_m$Group, c("FW", "CB", "LD", "SDT", "LDtoNS", "SDtoNS", "SD"))
+dat_summ_m$name <- factor(dat_summ_m$name, c("Male-biased", "Female-biased"))
+
+dat_summ_tx = gene_dat %>% group_by(Group) %>%
+  summarise(`Male-biased` = sum(Male_biased)/2+sum(Female_biased), 
+            `Female-biased` = sum(Female_biased)/2) %>% 
+  pivot_longer(cols = `Male-biased`:`Female-biased`) %>% 
+  left_join(dat_summ_m, by = c("Group" = "Group", "name" = "name"))
+dat_summ_tx$Group <- factor(dat_summ_tx$Group, c("FW", "CB", "LD", "SDT", "LDtoNS", "SDtoNS", "SD"))
+dat_summ_tx$name <- factor(dat_summ_tx$Group, c("Male-biased", "Female-biased"))
+
+
+# color
+cbPalette = c(alpha("dodgerblue1", alpha = .5), alpha("mediumpurple1", alpha = .5))
+group_label = c("Forest\nweaver\n\n(m vs f)", "Cordon\nbleu\n\n(m vs f)", 
+                "Canary\n\n\n(Bm\nvs\nBf)",
+                "Canary + T\n\n\n( m vs f)",
+                "Canary\n\n\n(Bm\nvs\nNBf     )", 
+                "Canary\n\n\n(NBm\nvs\nNBf     )",
+                "Canary\n\n\n(NBm\nvs\nNBf)") #_3
+                
+p = ggplot(data = dat_summ_m) +
+  geom_bar(stat = "identity", aes(x = Group, y = value, color = name, fill = name), width = 0.75) +
+  geom_text(data = dat_summ_tx, aes(x = Group, y = value.x, label = value.y), color = "black", size = 3) +
+  scale_fill_manual(values = cbPalette) + 
+  scale_color_manual(values = c("dodgerblue1", "mediumpurple1")) + 
+  scale_y_continuous(name = "Number of sex-biased genes", limit = c(0, 9500), expand = c(0, 0))  + 
+  scale_x_discrete(labels = group_label) +
+  guides(fill = guide_legend(reverse = F), colour = FALSE) +
+
+  theme(line = element_line(colour = "black", size = .2),
+        panel.background = element_blank(),
+        plot.background = element_blank(), # defualt is white
+        legend.background = element_blank(),
+        panel.grid = element_blank(),
+        panel.border = element_rect(color = "black", fill=NA, size = .2), 
+        axis.line = element_line(colour = "black", size = .2),
+        axis.title.x = element_blank(), #
+        axis.ticks = element_line(colour = "black", size = .2),
+        legend.title = element_blank(),
+        legend.key = element_blank(),
+        legend.position = c(0.15,0.9)); p
+
+```
+### Fig.2B
+```{r}
+library(tidyverse)  # v.1.3.0
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path) %>%
+  mutate(Chr = ifelse(Chromosome == "Z", "Z chrmosome", "Autosome"))
+
+##### summary plot ====
+dat_summ_m = gene_dat %>% group_by(Group, Chr) %>%
+  summarise(`Male-biased` = sum(Male_biased), 
+            `Female-biased` = sum(Female_biased)) %>% 
+  pivot_longer(cols = `Male-biased`:`Female-biased`) 
+
+dat_summ_m$Group <- factor(dat_summ_m$Group, c("FW", "CB", "LD", "SDT", "LDtoNS", "SDtoNS", "SD"))
+dat_summ_m$name <- factor(dat_summ_m$name, c("Male-biased", "Female-biased"))
+dat_summ_m$Chr <- factor(dat_summ_m$Chr, c("Autosome", "Z chrmosome"))
+
+
+
+dat_summ_tx = gene_dat %>% group_by(Group, Chr) %>%
+  summarise(`Male-biased` = sum(Male_biased)/2+sum(Female_biased), 
+            `Female-biased` = sum(Female_biased)/2) %>% 
+  pivot_longer(cols = `Male-biased`:`Female-biased`) %>% 
+  left_join(dat_summ_m, by = c("Group" = "Group", "Chr" = "Chr", "name" = "name"))
+
+dat_summ_tx$Group <- factor(dat_summ_tx$Group, c("FW", "CB", "LD", "SDT", "LDtoNS", "SDtoNS", "SD"))
+dat_summ_tx$name <- factor(dat_summ_tx$name, c("Male-biased", "Female-biased"))
+dat_summ_tx$Chr <- factor(dat_summ_tx$Chr, c("Autosome", "Z chrmosome"))
+
+# color
+cbPalette = c("grey", "gold")
+cbPalette_a = as.character(sapply(cbPalette, function(s){alpha(s, 0.7)}))
+group_label = c("Forest\nweaver\n\n(m vs f)", "Cordon\nbleu\n\n(m vs f)", 
+                "Canary\n\n\n(Bm\nvs\nBf)",
+                "Canary + T\n\n\n( m vs f)",
+                "Canary\n\n\n(Bm\nvs\nNBf     )", 
+                "Canary\n\n\n(NBm\nvs\nNBf     )",
+                "Canary\n\n\n(NBm\nvs\nNBf)") 
+                
+p = ggplot(data = dat_summ_m) +
+  geom_bar(stat = "identity", aes(x = Group, y = value, color = Chr, fill = Chr),
+           position = position_dodge2(0.2, padding = 0.05), width = 0.75) +
+  geom_text(data = dat_summ_tx, aes(x = Group, y = value.y + 200, label = value.y), color = "black", size = 3,
+            position = position_dodge2(0.75, padding = 0.05)) +
+  scale_fill_manual(values = cbPalette_a) +
+  scale_color_manual(values = cbPalette) + 
+  scale_y_continuous(name = "Number of sex-biased genes", limit = c(0, 8200), expand = c(0, 0))  + 
+  scale_x_discrete(labels = group_label) +
+  facet_grid( name ~ .) +
+  guides(fill = guide_legend(reverse = F), colour = FALSE) +
+  theme(line = element_line(colour = "black", size = .2),
+        panel.background = element_blank(),
+        plot.background = element_blank(), # defualt is white
+        legend.background = element_blank(),
+        panel.grid = element_blank(),
+        panel.border = element_rect(color = "black", fill=NA, size = .2), 
+        axis.line = element_line(colour = "black", size = .2),
+        axis.title.x = element_blank(), #
+        axis.ticks = element_line(colour = "black", size = .2),
+        legend.title = element_blank(),
+        legend.key = element_blank(),
+        legend.position = c(0.15,0.9)); p
+
+```
+
+### Table S3
+```{r}
+library(tidyverse)  # v.1.3.0
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path) %>%
+  mutate(Chr = ifelse(Chromosome == "Z", "Z chrmosome", "Autosome"))
+
+# Zebra finch annotation from https://www.ncbi.nlm.nih.gov/genome/?term=zebra+finch
+zf_anno_path = paste0(getwd(), "/data/ZF_chr_anno.csv")
+ZF_anno = read_csv(zf_anno_path)
+ZF_anno = as.data.frame(apply(ZF_anno, MARGIN = 1:2, function(s1){gsub("-", "", s1)}))
+ZF_anno = ZF_anno[ZF_anno$Type %in% c("", "master WGS") == FALSE, -1]
+ZF_anno$Protein = sapply(ZF_anno$Protein, function(s2){as.numeric(sub(",", "", s2))})
+
+#### Fisher’s exact tests ====
+
+fisher = function(chrX, setX){
+  # universe
+  n_universe_acc = 16371 # ZF protein-coding # https://www.ncbi.nlm.nih.gov/genome/?term=zebra+finch
+  
+  # universe: genes on ChrX
+  ## using Zebra finch annotation from https://www.ncbi.nlm.nih.gov/genome/?term=zebra+finch
+  n_acc_in_chrX = ZF_anno$Protein[which(ZF_anno$Name == chrX) ]
+
+  # List: all genes
+  data_acc = gene_dat %>% filter(Direction == setX)
+  n_data_acc = nrow(data_acc)
+  
+  # List: genes on chrX
+  data_acc_in_chrX = data_acc %>% filter(Chromosome == chrX)
+  n_data_acc_in_chrX = nrow(data_acc_in_chrX)
+  
+  mat <- matrix(
+    c(
+      n_data_acc_in_chrX, # genes in list & on chrX,
+      n_data_acc - n_data_acc_in_chrX, # genes in list but not on chrX
+      n_acc_in_chrX, # genes in universe & on chrX,
+      n_universe_acc - n_acc_in_chrX # genes in universe but not On chrX
+    ),
+    nrow=2
+  )
+  
+  fr <- fisher.test(mat, alternative = "greater")
+
+  input_name = if(grepl("up", setX)){
+    paste0(data_acc$Group[1], "_male-biased")
+  }else{
+    paste0(data_acc$Group[1], "_female-biased")
+  }
+  
+  df <- tibble(
+    sample = input_name,
+    chromosome = paste0("chr", chrX),
+    observed_in_chr = n_data_acc_in_chrX,
+    expected_in_chr = round(n_data_acc * n_acc_in_chrX / n_universe_acc, 1), # list_total * genes_on_chr / genes_total
+    odds.ratio = fr$estimate[["odds ratio"]],
+    pvalue = signif(fr$p.value, 3))
+  
+} 
+
+chr = unique(gene_dat$Chromosome)
+sets = unique(gene_dat$Direction)
+
+Result = mapply(chrX = rep(chr, length(sets)), 
+                setX = rep(sets, each = length(chr)), 
+                fisher, SIMPLIFY = F)
+Result2 = Result %>% bind_rows() %>%
+  group_by(sample) %>%
+  mutate(FDR = p.adjust(pvalue, method = 'bonferroni'),
+         sig = ifelse(FDR <0.05, 'sig', NA))
+
+```
+
+### Fig.3A: Autosomal
+```{r}
+library(tidyverse)  # v.1.3.0
+library(gplots) # 3.0.4
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path) %>%
+  mutate(Chr = ifelse(Chromosome == "Z", "Z chrmosome", "Autosome"))
+
+FW = gene_dat %>% filter(Group == "FW", Male_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+CB = gene_dat %>% filter(Group == "CB", Male_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+LDtoNS = gene_dat %>% filter(Group == "LDtoNS", Male_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+
+input = list("FW" = FW, "CB" = CB, "LDtoNS" = LDtoNS)
+tmp <- venn(input, intersections = T, small = 0.5); 
+
+```
+
+### Fig.3A: Z chromosomal
+```{r}
+library(tidyverse)  # v.1.3.0
+library(gplots) # 3.0.4
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path) %>%
+  mutate(Chr = ifelse(Chromosome == "Z", "Z chrmosome", "Autosome"))
+
+FW = gene_dat %>% filter(Group == "FW", Male_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+CB = gene_dat %>% filter(Group == "CB", Male_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+LDtoNS = gene_dat %>% filter(Group == "LDtoNS", Male_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+
+input = list("FW" = FW, "CB" = CB, "LDtoNS" = LDtoNS)
+tmp <- venn(input, intersections = T, small = 0.5); 
+
+
+```
+### Fig.3B: Autosomal
+```{r}
+library(tidyverse)  # v.1.3.0
+library(gplots) # 3.0.4
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path) %>%
+  mutate(Chr = ifelse(Chromosome == "Z", "Z chrmosome", "Autosome"))
+
+FW = gene_dat %>% filter(Group == "FW", Female_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+CB = gene_dat %>% filter(Group == "CB", Female_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+LDtoNS = gene_dat %>% filter(Group == "LDtoNS", Female_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+
+input = list("FW" = FW, "CB" = CB, "LDtoNS" = LDtoNS)
+tmp <- venn(input, intersections = T, small = 0.5); 
+```
+
+### Fig.3B: Z chromosomal
+```{r}
+library(tidyverse)  # v.1.3.0
+library(gplots) # 3.0.4
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path) %>%
+  mutate(Chr = ifelse(Chromosome == "Z", "Z chrmosome", "Autosome"))
+
+FW = gene_dat %>% filter(Group == "FW", Female_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+CB = gene_dat %>% filter(Group == "CB", Female_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+LDtoNS = gene_dat %>% filter(Group == "LDtoNS", Female_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+
+input = list("FW" = FW, "CB" = CB, "LDtoNS" = LDtoNS)
+tmp <- venn(input, intersections = T, small = 0.5); 
+```
+
+### Fig.S5
+```{r}
+library(tidyverse)  # v.1.3.0
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path) %>%
+  mutate(Chr = ifelse(Chromosome == "Z", "Z chrmosome", "Autosome"),
+         Category = ifelse(abs(LFC.ave) < 0.5, "unbiased", NA),
+         Category = ifelse(abs(LFC.ave) >= 0.5 & abs(LFC.ave) < 1, "lowly biased", Category),
+         Category = ifelse(abs(LFC.ave) >= 1 & abs(LFC.ave) < 2, "mildly biased", Category),
+         Category = ifelse(abs(LFC.ave) >= 2, "highly biased", Category)
+  )
+
+gene_dat$Category <- factor(gene_dat$Category, c("highly biased", "mildly biased", "lowly biased", "unbiased"))
+
+##### summary plot ====
+dat_summ_m = gene_dat %>% group_by(Group, Category) %>%
+  summarise(`Male-biased` = sum(Male_biased), 
+            `Female-biased` = sum(Female_biased)) %>% 
+  pivot_longer(cols = `Male-biased`:`Female-biased`) 
+
+dat_summ_m$Group <- factor(dat_summ_m$Group, c("FW", "CB", "LD", "SDT", "LDtoNS", "SDtoNS", "SD"))
+dat_summ_m$name <- factor(dat_summ_m$name, c("Male-biased", "Female-biased"))
+
+
+dat_summ_tx = gene_dat %>% group_by(Group, Category) %>%
+  summarise(`Male-biased` = sum(Male_biased)/2+sum(Female_biased), 
+            `Female-biased` = sum(Female_biased)/2) %>% 
+  pivot_longer(cols = `Male-biased`:`Female-biased`) %>% 
+  left_join(dat_summ_m, by = c("Group" = "Group", "Category" = "Category", "name" = "name"))
+
+dat_summ_tx$Group <- factor(dat_summ_tx$Group, c("FW", "CB", "LD", "SDT", "LDtoNS", "SDtoNS", "SD"))
+dat_summ_tx$name <- factor(dat_summ_tx$name, c("Male-biased", "Female-biased"))
+
+# color
+cbPalette = c("red", "dodgerblue1", "skyblue","grey")
+cbPalette_a = as.character(sapply(cbPalette, function(s){alpha(s, 0.5)}))
+group_label = c("Forest\nweaver\n\n(m vs f)", "Cordon\nbleu\n\n(m vs f)", 
+                "Canary\n\n\n(Bm\nvs\nBf)",
+                "Canary + T\n\n\n( m vs f)",
+                "Canary\n\n\n(Bm\nvs\nNBf     )", 
+                "Canary\n\n\n(NBm\nvs\nNBf     )",
+                "Canary\n\n\n(NBm\nvs\nNBf)") #_3
+                
+p = ggplot(data = dat_summ_m) +
+  geom_bar(stat = "identity", aes(x = Group, y = value, color = Category, fill = Category),
+           position = position_dodge2(0.2, padding = 0.05, preserve = "single"), width = 0.75) +
+  geom_text(data = dat_summ_tx, aes(x = Group, y = value.y + 250, label = value.y), size = 3,
+            position = position_dodge2(width = 1, padding = 0.05, preserve = "single"),
+            hjust = 0.5 
+            ) +
+  scale_fill_manual(values = cbPalette_a) +
+  scale_color_manual(values = cbPalette) + 
+  scale_y_continuous(name = "Number of sex-biased genes", limit = c(0, 8000), expand = c(0, 0))  + 
+  scale_x_discrete(labels = group_label) +
+  facet_grid( name ~ .) +
+  theme(line = element_line(colour = "black", size = .2),
+        panel.background = element_blank(),
+        plot.background = element_blank(),
+        legend.background = element_blank(),
+        panel.grid = element_blank(),
+        panel.border = element_rect(color = "black", fill=NA, size = .2), 
+        axis.line = element_line(colour = "black", size = .2),
+        axis.title.x = element_blank(), #
+        axis.ticks = element_line(colour = "black", size = .2),
+        legend.title = element_blank(),
+        legend.key = element_blank(),
+        legend.position = c(0.15,0.9)); p
+
+
+```
+
+### Fig.S6A
+```{r}
+library(tidyverse)  # v.1.3.0
+library(RColorBrewer) # v.1.1-2
+library(gplots) # 3.0.4
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path) %>%
+  mutate(Chr = ifelse(Chromosome == "Z", "Z chrmosome", "Autosome"))
+
+FW = gene_dat %>% filter(Group == "FW", Male_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+CB = gene_dat %>% filter(Group == "CB", Male_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+LD = gene_dat %>% filter(Group == "LD", Male_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+SDT = gene_dat %>% filter(Group == "SDT", Male_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+LDtoNS = gene_dat %>% filter(Group == "LDtoNS", Male_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+SDtoNS = gene_dat %>% filter(Group == "SDtoNS", Male_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+SD = gene_dat %>% filter(Group == "SD", Male_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+
+input = list(FW, CB, LD, SDT, LDtoNS, SDtoNS, SD)
+
+fn_percent = function(i){
+  j = 1:length(input)
+  sapply(1:length(j), function(t){ length(intersect(input[[i]], input[[t]]))/length(input[[i]]) })
+}
+
+input2 = sapply(1:length(input), fn_percent)
+
+colp = brewer.pal(9, 'PuBu')
+heatmap.2(input2, Rowv = NA, Colv = NA, 
+          dendrogram ='none', symm = T, revC=F, trace = 'none',
+          cellnote = format(input2, digits = 1), notecol = 'black',
+          keysize = 1, col = colp,
+          density.info = 'none', cexRow = 1, cexCol = 1, srtCol = 0,
+          margins = c(2, 10))
+```
+
+### Fig.S6B
+```{r}
+library(tidyverse)  # v.1.3.0
+library(RColorBrewer) # v.1.1-2
+library(gplots) # 3.0.4
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path) %>%
+  mutate(Chr = ifelse(Chromosome == "Z", "Z chrmosome", "Autosome"))
+
+FW = gene_dat %>% filter(Group == "FW", Male_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+CB = gene_dat %>% filter(Group == "CB", Male_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+LD = gene_dat %>% filter(Group == "LD", Male_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+SDT = gene_dat %>% filter(Group == "SDT", Male_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+LDtoNS = gene_dat %>% filter(Group == "LDtoNS", Male_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+SDtoNS = gene_dat %>% filter(Group == "SDtoNS", Male_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+SD = gene_dat %>% filter(Group == "SD", Male_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+
+input = list(FW, CB, LD, SDT, LDtoNS, SDtoNS, SD)
+
+fn_percent = function(i){
+  j = 1:length(input)
+  sapply(1:length(j), function(t){ length(intersect(input[[i]], input[[t]]))/length(input[[i]]) })
+}
+
+input2 = sapply(1:length(input), fn_percent)
+
+colp = brewer.pal(9, 'PuBu')
+heatmap.2(input2, Rowv = NA, Colv = NA, 
+          dendrogram ='none', symm = T, revC=F, trace = 'none',
+          cellnote = format(input2, digits = 1), notecol = 'black',
+          keysize = 1, col = colp,
+          density.info = 'none', cexRow = 1, cexCol = 1, srtCol = 0,
+          margins = c(2, 10))
+```
+### Fig.S6C
+```{r}
+library(tidyverse)  # v.1.3.0
+library(RColorBrewer) # v.1.1-2
+library(gplots) # 3.0.4
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path) %>%
+  mutate(Chr = ifelse(Chromosome == "Z", "Z chrmosome", "Autosome"))
+
+FW = gene_dat %>% filter(Group == "FW", Female_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+CB = gene_dat %>% filter(Group == "CB", Female_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+LD = gene_dat %>% filter(Group == "LD", Female_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+SDT = gene_dat %>% filter(Group == "SDT", Female_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+LDtoNS = gene_dat %>% filter(Group == "LDtoNS", Female_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+SDtoNS = gene_dat %>% filter(Group == "SDtoNS", Female_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+SD = gene_dat %>% filter(Group == "SD", Female_biased == 1, Chr == "Autosome") %>%
+  select(GeneSymbol) %>% pull()
+
+input = list(FW, CB, LD, SDT, LDtoNS, SDtoNS, SD)
+
+fn_percent = function(i){
+  j = 1:length(input)
+  sapply(1:length(j), function(t){ length(intersect(input[[i]], input[[t]]))/length(input[[i]]) })
+}
+
+input2 = sapply(1:length(input), fn_percent)
+
+colp = brewer.pal(9, 'PuRd')
+heatmap.2(input2, Rowv = NA, Colv = NA, 
+          dendrogram ='none', symm = T, revC=F, trace = 'none',
+          cellnote = format(input2, digits = 1), notecol = 'black',
+          keysize = 1, col = colp,
+          density.info = 'none', cexRow = 1, cexCol = 1, srtCol = 0,
+          margins = c(2, 10))
+```
+
+### Fig.S6D
+```{r}
+library(tidyverse)  # v.1.3.0
+library(RColorBrewer) # v.1.1-2
+library(gplots) # 3.0.4
+
+## load data
+csv_path =  paste0(getwd(), "/data/Sex_biased_gene_expression.csv")
+gene_dat = read_csv(csv_path) %>%
+  mutate(Chr = ifelse(Chromosome == "Z", "Z chrmosome", "Autosome"))
+
+FW = gene_dat %>% filter(Group == "FW", Female_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+CB = gene_dat %>% filter(Group == "CB", Female_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+LD = gene_dat %>% filter(Group == "LD", Female_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+SDT = gene_dat %>% filter(Group == "SDT", Female_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+LDtoNS = gene_dat %>% filter(Group == "LDtoNS", Female_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+SDtoNS = gene_dat %>% filter(Group == "SDtoNS", Female_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+SD = gene_dat %>% filter(Group == "SD", Female_biased == 1, Chr == "Z chrmosome") %>%
+  select(GeneSymbol) %>% pull()
+
+input = list(FW, CB, LD, SDT, LDtoNS, SDtoNS, SD)
+
+fn_percent = function(i){
+  j = 1:length(input)
+  sapply(1:length(j), function(t){ length(intersect(input[[i]], input[[t]]))/length(input[[i]]) })
+}
+
+input2 = sapply(1:length(input), fn_percent)
+
+colp = brewer.pal(9, 'PuRd')
+heatmap.2(input2, Rowv = NA, Colv = NA, 
+          dendrogram ='none', symm = T, revC=F, trace = 'none',
+          cellnote = format(input2, digits = 1), notecol = 'black',
+          keysize = 1, col = colp,
+          density.info = 'none', cexRow = 1, cexCol = 1, srtCol = 0,
+          margins = c(2, 10))
+```
