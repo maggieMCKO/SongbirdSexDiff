@@ -207,6 +207,8 @@ Result2 = Result %>% bind_rows() %>%
   mutate(FDR = p.adjust(pvalue, method = 'bonferroni'),
          sig = ifelse(FDR <0.05, 'sig', NA))
 
+# csv_path =  paste0(getwd(), "/Sex_biased_gene_fisher.csv")
+# write_csv(Result2, csv_path, na="")
 ```
 
 ### Fig.3A: Autosomal

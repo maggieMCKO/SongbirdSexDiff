@@ -1,0 +1,190 @@
+---
+title: "Plot Fig.3C"
+output: html_notebook
+author: "MaggieMCKO"
+date: "12/25/2020"
+---
+
+This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.3C of the [sex difference manuscript] ().
+
+### Fig.3C: compile data
+```{r}
+library(tidyverse)  # v.1.3.0
+library(RColorBrewer) # v.1.1-2
+library(gtools) # v.3.8.2
+library(gplots) # v.3.0.4
+
+cluego_path = paste0(getwd(), "/data/Cluego_sex_biased/")
+Name_of_interest = c("FW_H_up", "CB_H_up", "LDtoNS_H_up", "FW_H_dw", "CB_H_dw", "LDtoNS_H_dw") # ordering at line 27
+
+listoffiles = list.files(cluego_path, pattern = "NodeAttributeTable", full.names = TRUE); 
+listoffiles = sapply(Name_of_interest, function(s){listoffiles[grep(s, listoffiles)]})
+
+all = lapply(X = listoffiles, FUN = function(s){read_tsv(s)})
+names(all) =  c("FWm", "CBm", "LDCSm", "FWf", "CBf", "SDCfS")
+
+all_with_ori = lapply(1:length(all), FUN = function(i){a1 = all[[i]][, c(1, 3, 9, 6, 5, 12, 14)]}) 
+cluego_merge = merge(all_with_ori[[1]], all_with_ori[[2]], by = names(all_with_ori[[1]])[c(1, 2)], all = TRUE, suffixes = c(paste0("_", names(all)[1]), paste0("_", names(all)[2])))
+for(i in 3:length(all_with_ori)){
+  if(odd(i)==TRUE){  cluego_merge = merge(cluego_merge, all_with_ori[[i]], by = names(all_with_ori[[1]])[c(1, 2)], all = TRUE)
+  dim(cluego_merge)
+  }else{
+    cluego_merge = merge(cluego_merge, all_with_ori[[i]], by = names(all_with_ori[[1]])[c(1, 2)], all = TRUE, suffixes = c(paste0("_", names(all)[i-1]), paste0("_", names(all)[i])))
+    dim(cluego_merge)}}
+
+names(cluego_merge)
+ind_padj = grep(pattern = "Term.PValue.Corrected", names(cluego_merge))
+ind_GOgroup = grep(pattern = "GOGroups", names(cluego_merge))
+ind_True = grep(pattern = "OverViewTerm", names(cluego_merge))
+ind_GeneFound = grep(pattern = "Associated.Genes.Found", names(cluego_merge))
+ind_NumGene = grep(pattern = "Nr..Genes", names(cluego_merge)) # added 20160919
+dim(cluego_merge)
+cluego_merge = cluego_merge[, c(1, 2, ind_padj, ind_NumGene, ind_GOgroup, ind_True, ind_GeneFound)] 
+dim(cluego_merge)
+names(cluego_merge)
+
+if(odd(length(all_with_ori))){
+  ind_padj2 = grep(pattern = "Term.PValue.Corrected", names(cluego_merge))
+  ind_NumGene2 = grep(pattern = "Nr..Genes", names(cluego_merge)) # added 20160919
+  ind_GOgroup2 = grep(pattern = "GOGroups", names(cluego_merge))
+  ind_True2 = grep(pattern = "OverViewTerm", names(cluego_merge))
+  ind_GeneFound2= grep(pattern = "Associated.Genes.Found", names(cluego_merge))
+  names(cluego_merge)[c(max(ind_padj2), max(ind_NumGene2), max(ind_GOgroup2), max(ind_True2), max(ind_GeneFound2))] = 
+    paste0(names(cluego_merge)[c(max(ind_padj2), max(ind_NumGene2), max(ind_GOgroup2), max(ind_True2), max(ind_GeneFound2))], "_", names(all)[length(listoffiles)]) 
+}
+names(cluego_merge)
+
+### sort by "GOGroups" ###
+ind_GOgroup2 = grep(pattern = "GOGroups", names(cluego_merge))
+# cat(names(cluego_merge)[ind_GOgroup2], sep = ", ")
+cluego_merge_arrange = cluego_merge %>% arrange(GOGroups_FWm, GOGroups_CBm, GOGroups_LDCSm, GOGroups_FWf, GOGroups_CBf, GOGroups_SDCfS)
+
+cluego_merge = cluego_merge_arrange
+rm(cluego_merge_arrange)
+names(cluego_merge)[3:(3+length(listoffiles)-1)] <- sapply(names(cluego_merge)[3:(3+length(listoffiles)-1)] , function(s){x = unlist(strsplit(as.character(s), split = "Term.PValue.Corrected.with.Bonferroni.step.down_"))[2]})
+
+ind.startCol = grep(names(all)[1], x = names(cluego_merge))[1]
+
+### keep only top 6 for each analysis 
+desired_nrow = 6
+dat = cluego_merge[, ind.startCol:(ind.startCol+length(listoffiles)-1)] ### otherwise -1 # normally
+
+ind = apply(dat, MARGIN = 2, function(s){ 
+  notNA = which(is.na(s)==F)
+  len = length(notNA)
+  if(len > desired_nrow) {
+    ind.to.keep = which( s < quantile(s, probs = desired_nrow/len, na.rm = T)) }else{
+      cat("len", length(s), "\n")
+      ind.to.keep = intersect(1:length(s), notNA)
+    }
+})
+ind
+str(ind) 
+ind = unlist(ind); length(ind)
+ind = unique(as.numeric(ind)); length(ind)
+cluego_merge.short = cluego_merge[ind,]
+cluego_merge.short = arrange(cluego_merge.short, GOTerm)
+View(cluego_merge.short)
+
+# path  = paste0(cluego_path, "merge_ALL_2017-05-12_d6_qVarious.csv")
+# write_csv(cluego_merge.short, path = path)
+
+# annotate GO category
+
+```
+
+### Fig.3C: plot setup 
+```{r}
+
+## load annotated 
+path  = paste0(cluego_path, "merge_ALL_2017-05-12_d6_qVarious.csv")
+cluego_merge.short = read_csv(path)
+
+## sort, rename colnames and row.names ====
+input.dat = cluego_merge.short %>% arrange(fun.ind, GOTerm)
+# names(input.dat)
+# row.names(input.dat)
+cat_GO = paste(input.dat$GOID, input.dat$GOTerm, sep = ": ")
+
+# select only needed columns 
+ind.startCol = grep("FWm", x = names(input.dat))[1]
+input = input.dat[, ind.startCol:(ind.startCol+length(listoffiles)-1)] 
+input = sapply(input, FUN = function(s){as.numeric(as.character(s))})
+
+row.names(input) = cat_GO
+# row.names(input)
+# colnames(input)
+colnames(input) = gsub(pattern = "m", replacement = " male-biased", x = colnames(input))
+colnames(input) = gsub(pattern = "f", replacement = " female-biased", x = colnames(input))
+colnames(input)[6] = "SDCS female-biased"
+colnames(input) 
+
+# color palettes ====
+colpal = brewer.pal(9, name = 'Set1')[c(1:2, 8, 3,4,6,7,5, 9)]
+colpal = c(colpal,  brewer.pal(9, name = 'Paired')[c(1,3)] )
+colpal = colpal[1:length(unique(input.dat$fun))]
+length(colpal)
+length(unique(input.dat$fun))
+# plot(1:length(colpal), 1:length(colpal), col=colpal, pch=19)
+
+funtobe = input.dat$fun
+ind_fun = sapply(unique(funtobe), FUN = function(s)grep(pattern = s, x = funtobe)[1])
+fun = as.character(funtobe[ind_fun])
+fun
+
+jColors <- with(input.dat, data.frame(fun = unique(funtobe), color = I(colpal)))
+RowSideColors_fun = jColors$color[match(input.dat$fun, jColors$fun)]
+RowSideColors.mat = matrix(RowSideColors_fun, nrow = nrow(input.dat), byrow = T)
+
+range = range(input, na.rm = T)
+my_palette <- colorRampPalette(c("red", "yellow", "green"))(n = 14)
+myBreaks <- c(seq(0, round(range[2], 8), length.out = 15)) # normally round(range[2], 2) 201609
+myBreaks[7]
+signif(range[2], 6)
+signif(myBreaks[7], 6)
+
+```
+### Fig.3C: plot 
+```{r}
+width = 4.5
+height = 6 
+path  = paste0(cluego_path, "heatmap.pdf")
+pdf(path, width = width, height = height, pointsize = 6, onefile = TRUE)
+heatmap.2(as.matrix(input), 
+          Rowv=NULL,           # turn off column clustering 
+          Colv = NULL, 
+          dendrogram="none",   # only draw a row dendrogram # 'none', 'row', 'column' or 'both'
+          scale = "none", 
+          col=my_palette,
+          RowSideColors = RowSideColors.mat,
+          # ColSideColors = ColSideColors,
+          colsep=0:nrow(input),
+          rowsep=0:nrow(input),
+          sepcolor="black",
+          sepwidth=c(0.001,0.001),         
+          cexRow = 0.75, cexCol = 0.75,
+          srtCol = 60, # rotation degree
+          offsetCol = -0.5,
+          density.info="none",  # turns off density plot inside color legend "histogram","density","none"
+          trace="none",         # turns off trace lines inside the heat map "column","row","both","none"
+          breaks = myBreaks,
+          key = TRUE, symkey = FALSE, keysize = .1,
+          key.title = "",
+          key.xlab = "p value",
+          lmat = rbind(c(1, 2, 0, 3), c(5, 5, 4 ,0)), 
+          lhei = c(.84*height, .16*height), 
+          lwid = c(.05*width, .20*width, .26*width, .49*width),
+          margins =c(9, 2)    # widens margins around plot # row: top-bottom, col: left-right
+)
+legend(x = .2, y = .2,      # location of the legend on the heatmap plot
+       title = "Function",
+       legend = fun, # category labels
+       col = unique(RowSideColors_fun),  # color key
+       cex = .7, lty = 1,  # line style
+       lwd = 4,          # line width,
+       box.lwd = .1, 
+       ncol = 2
+) 
+dev.off()
+```
+

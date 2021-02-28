@@ -1,0 +1,188 @@
+---
+title: "Plot Fig.4D"
+output: html_notebook
+author: "MaggieMCKO"
+date: "12/25/2020"
+---
+
+This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.4D of the [sex difference manuscript] ().
+
+### Fig.4D: compile data
+```{r}
+library(tidyverse)  # v.1.3.0
+library(RColorBrewer) # v.1.1-2
+library(gtools) # v.3.8.2
+library(gplots) # v.3.0.4
+
+cluego_path = paste0(getwd(), "/data/Cluego_singing/")
+
+Name_of_interest = list.files(cluego_path, pattern = '.txt', full.names = F, recursive = F); Name_of_interest
+
+# rename
+Name_of_interest = sapply(Name_of_interest, function(s){unlist(strsplit(s, "\\s*_f"))[1]}); Name_of_interest
+Name_of_interest = gsub("Common", "Sex-shared", Name_of_interest); Name_of_interest
+Name_of_interest = gsub("^f", "Female-specific", Name_of_interest); Name_of_interest
+Name_of_interest = gsub("^m", "Male-specific", Name_of_interest); Name_of_interest
+cat(Name_of_interest, sep=", ") 
+
+# reorder
+order_for_name = c("Female-specific", "Male-specific", "Sex-shared")
+ind_order = sapply(order_for_name, function(s){grep(paste0("^", s), Name_of_interest)})
+Name_of_interest = Name_of_interest[ind_order]
+cbind(1:length(Name_of_interest), Name_of_interest)
+
+# get file path
+listoffiles = list.files(cluego_path, pattern = "NodeAttributeTable", full.names = TRUE); 
+listoffiles = sapply(names(Name_of_interest), function(s){listoffiles[grep(s, listoffiles)]})
+
+# load
+all = lapply(X = listoffiles, FUN = function(s){read_tsv(s)})
+names(all) =  Name_of_interest
+
+all_with_ori = lapply(1:length(all), FUN = function(i){a1 = all[[i]][, c(1, 3, 9, 6, 5, 12, 14)]}) 
+cluego_merge = merge(all_with_ori[[1]], all_with_ori[[2]], by = names(all_with_ori[[1]])[c(1, 2)], all = TRUE, suffixes = c(paste0("_", names(all)[1]), paste0("_", names(all)[2])))
+for(i in 3:length(all_with_ori)){
+  if(odd(i)==TRUE){  cluego_merge = merge(cluego_merge, all_with_ori[[i]], by = names(all_with_ori[[1]])[c(1, 2)], all = TRUE)
+  dim(cluego_merge)
+  }else{
+    cluego_merge = merge(cluego_merge, all_with_ori[[i]], by = names(all_with_ori[[1]])[c(1, 2)], all = TRUE, suffixes = c(paste0("_", names(all)[i-1]), paste0("_", names(all)[i])))
+    dim(cluego_merge)}}
+
+names(cluego_merge)
+ind_padj = grep(pattern = "Term.PValue.Corrected", names(cluego_merge))
+ind_GOgroup = grep(pattern = "GOGroups", names(cluego_merge))
+ind_True = grep(pattern = "OverViewTerm", names(cluego_merge))
+ind_GeneFound = grep(pattern = "Associated.Genes.Found", names(cluego_merge))
+ind_NumGene = grep(pattern = "Nr..Genes", names(cluego_merge)) # added 20160919
+dim(cluego_merge)
+cluego_merge = cluego_merge[, c(1, 2, ind_padj, ind_NumGene, ind_GOgroup, ind_True, ind_GeneFound)] 
+dim(cluego_merge)
+names(cluego_merge)
+
+if(odd(length(all_with_ori))){
+  ind_padj2 = grep(pattern = "Term.PValue.Corrected", names(cluego_merge))
+  ind_NumGene2 = grep(pattern = "Nr..Genes", names(cluego_merge)) # added 20160919
+  ind_GOgroup2 = grep(pattern = "GOGroups", names(cluego_merge))
+  ind_True2 = grep(pattern = "OverViewTerm", names(cluego_merge))
+  ind_GeneFound2= grep(pattern = "Associated.Genes.Found", names(cluego_merge))
+  names(cluego_merge)[c(max(ind_padj2), max(ind_NumGene2), max(ind_GOgroup2), max(ind_True2), max(ind_GeneFound2))] = 
+    paste0(names(cluego_merge)[c(max(ind_padj2), max(ind_NumGene2), max(ind_GOgroup2), max(ind_True2), max(ind_GeneFound2))], "_", names(all)[length(listoffiles)]) 
+}
+names(cluego_merge)
+
+### sort by "GOGroups" ###
+ind_GOgroup2 = grep(pattern = "GOGroups", names(cluego_merge))
+# cat(names(cluego_merge)[ind_GOgroup2], sep = ", ")
+cluego_merge_arrange = cluego_merge %>% arrange(`GOGroups_Female-specific`, `GOGroups_Male-specific`, `GOGroups_Sex-shared`)
+
+cluego_merge = cluego_merge_arrange
+rm(cluego_merge_arrange)
+names(cluego_merge)[3:(3+length(listoffiles)-1)] <- sapply(names(cluego_merge)[3:(3+length(listoffiles)-1)] , function(s){x = unlist(strsplit(as.character(s), split = "Term.PValue.Corrected.with.Bonferroni.step.down_"))[2]})
+
+ind.startCol = grep(names(all)[1], x = names(cluego_merge))[1]
+
+```
+
+### Fig.4D: plot setup 
+```{r}
+
+## load annotated 
+path  = paste0(cluego_path, "merge_ALL_2018-07-19_manuelsel_anno.csv")
+input.dat = read_csv(path)
+
+input.dat = arrange(input.dat, `Nr..Genes_Female-specific`, `Nr..Genes_Male-specific`, `Nr..Genes_Sex-shared`)
+# names(input.dat)
+# row.names(input.dat)
+ind.startCol = grep('Nr..Genes', x = names(input.dat))[1]
+input = input.dat[, c(2,3, ind.startCol:(ind.startCol+length(listoffiles)-1))] 
+cat_GO = paste(input.dat$GOID, input.dat$GOTerm, sep = ": ")
+
+## rename
+row.names(input) = cat_GO
+row.names(input)
+colnames(input)
+colnames(input) = gsub(pattern = "Nr..Genes_", replacement = "", x = colnames(input)); colnames(input)
+
+## reshape ====      
+input = as.data.frame(input)
+input = cbind("GO term" = cat_GO, input)
+
+measure.vars = names(input)[-c(1:3)]
+input_m = input %>% pivot_longer(cols = `Female-specific`:`Sex-shared`, names_to = "variable", values_to = "value")
+zero = gsub('\\d+', 0, input_m$value)
+input_m = cbind(input_m, 'zero' = zero)
+input_m[, c("value", "zero")] = sapply(input_m[, c("value", "zero")] , FUN = function(s){as.numeric(as.character(s))})
+
+## sort 
+input_m = arrange(input_m, variable, fun.ind, value)
+input_m = within(input_m,
+                 `GO term` <- factor(`GO term`, levels = rev(unique(input_m$`GO term`))))
+input_m = within(input_m, variable <- factor(variable, levels = measure.vars))
+
+```
+
+### Fig.4D: legend
+```{r}
+colpal = c(brewer.pal(9, name = 'Set1'), brewer.pal(9, name = 'Set3')[-2])
+# plot(1:length(colpal), col = colpal, pch = 19)
+colpal = colpal[1:length(unique(input_m$fun))]
+colpal_alpha = alpha(colpal, 0.5)
+lab = unique(input_m$fun); lab
+
+ncol = 3
+n = ceiling(length(lab)/ncol) # row
+by_gap = 30
+seq_x = seq(0, by = by_gap, length.out = ncol)
+seq_x_text = seq(0.2, by = by_gap, length.out = ncol)
+
+path = paste0(cluego_path, "legend.pdf")
+pdf(path, width = 4.15, height = 1, pointsize = 6, onefile = TRUE)
+par(mar = c(2,0.2,2.8,4))
+plot(x  = rep(seq_x, each = n), y = rep(n:1, ncol), col = colpal_alpha, pch = 19, xlim = c(0, by_gap*ncol+1), ylim = c(0, n+1), 
+     xaxt='n', yaxt='n', main = "Function category", xlab="", ylab="", bty="n")
+text(x =  rep(seq_x_text, each = n), y = rep(n:1, ncol), lab, cex = 1, pos=4, col="black")
+dev.off()
+```
+
+
+### Fig.4D: GO plot
+```{r}
+cbPalette = brewer.pal(9, 'Set1')
+cbPalette = c(cbPalette[c(1,2)], "darkgoldenrod1")
+# plot(1:length(cbPalette), col = cbPalette, pch = 19)
+
+jColors <- with(input_m, data.frame(fun = lab, color = I(colpal)))
+RowSideColors_fun = jColors$color[match(input_m$fun, jColors$fun)]
+
+max = max(input_m$value, na.rm = T)
+
+# path = paste0(cluego_path, "GO_plot.pdf")
+# pdf(path, width = 4.33, height = 4.5, pointsize = 6, onefile = TRUE)
+ggplot(input_m, aes(y = value, x = `GO term`)) +
+  geom_bar(aes( fill = variable), stat = 'identity', position="dodge", width = .7, alpha = .75) + 
+  geom_point(aes(x = `GO term`, y = max + 10), color = RowSideColors_fun, alpha = 0.1, size = 2) + 
+  coord_flip() +
+  scale_fill_manual(values = cbPalette) +
+  scale_y_continuous(name = "Number of observed genes", expand = c(0,0), limits = c(0, 1200)) +
+  guides(fill = guide_legend(nrow = 3, byrow = TRUE)) +
+  theme(panel.background = element_blank(),
+        plot.background = element_blank(),
+        panel.grid.major.x = element_line(color = "grey", size = .2),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.y = element_blank(), 
+        panel.grid.minor.y = element_blank(), 
+        panel.border = element_rect(color = "black", fill=NA, size =.2), 
+        axis.line = element_line(color = "black", size = .2),
+        axis.title.x = element_text(face='bold', size= AxisTitleFontSizeSize),
+        axis.title.y = element_blank(),
+        axis.text.x = element_text(colour = "black", size = AxisTxFontSizeSize, vjust = 0.5),
+        axis.text.y = element_text(colour = "black", size = AxisTxFontSizeSize, hjust = 0),
+        axis.ticks = element_line(colour = "black", size = 0.05),
+        legend.key = element_blank(),
+        legend.title = element_blank(),
+        legend.text = element_text(colour = "black", size = 6),
+        legend.position = c(0.68, 0.94))
+# dev.off()
+
+```
+
