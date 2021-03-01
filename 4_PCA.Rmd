@@ -5,7 +5,7 @@ author: "MaggieMCKO"
 date: "12/25/2020"
 ---
 
-This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.1C, Fig.S4, and TableS2 of the [sex difference manuscript] ().
+This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.1C, Fig.S4, and TableS2 of Ko et al. (https://doi.org/10.1101/2021.02.28.432133).
 
 ### PCA
 ```{r}

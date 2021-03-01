@@ -1,4 +1,5 @@
-# SongbirdSexDiff
+### The gene expression profile of the song control nucleus HVC shows sex specificity, hormone responsiveness, and species specificity among songbirds
+https://www.biorxiv.org/content/10.1101/2021.02.28.432133v1
 
 Scripts | Figure/Table | Data | Note
 --|--|--|--|
