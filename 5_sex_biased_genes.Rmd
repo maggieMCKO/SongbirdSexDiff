@@ -134,7 +134,7 @@ p = ggplot(data = dat_summ_m) +
 
 ```
 
-### Table S3
+### Table S1
 ```{r}
 library(tidyverse)  # v.1.3.0
 
@@ -297,7 +297,7 @@ input = list("FW" = FW, "CB" = CB, "LDtoNS" = LDtoNS)
 tmp <- venn(input, intersections = T, small = 0.5); 
 ```
 
-### Fig.S5
+### Fig.S4
 ```{r}
 library(tidyverse)  # v.1.3.0
 
@@ -370,7 +370,7 @@ p = ggplot(data = dat_summ_m) +
 
 ```
 
-### Fig.S6A
+### Fig.S5A
 ```{r}
 library(tidyverse)  # v.1.3.0
 library(RColorBrewer) # v.1.1-2
@@ -414,7 +414,7 @@ heatmap.2(input2, Rowv = NA, Colv = NA,
           margins = c(2, 10))
 ```
 
-### Fig.S6B
+### Fig.S5B
 ```{r}
 library(tidyverse)  # v.1.3.0
 library(RColorBrewer) # v.1.1-2
@@ -457,7 +457,7 @@ heatmap.2(input2, Rowv = NA, Colv = NA,
           density.info = 'none', cexRow = 1, cexCol = 1, srtCol = 0,
           margins = c(2, 10))
 ```
-### Fig.S6C
+### Fig.S5C
 ```{r}
 library(tidyverse)  # v.1.3.0
 library(RColorBrewer) # v.1.1-2
@@ -501,7 +501,7 @@ heatmap.2(input2, Rowv = NA, Colv = NA,
           margins = c(2, 10))
 ```
 
-### Fig.S6D
+### Fig.S5D
 ```{r}
 library(tidyverse)  # v.1.3.0
 library(RColorBrewer) # v.1.1-2

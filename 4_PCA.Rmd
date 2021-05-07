@@ -74,7 +74,7 @@ ggplot(data=pca_score, aes(x = PC1, y = PC2, color = Group), environment = envir
 
 ```
 
-#### Fig. S4
+#### Fig. S6
 ```{r}
 percent <- round(100*mydata.pca@R2, digits = 4) 
 percentcum <- round(100*mydata.pca@R2cum, digits = 4) 
@@ -108,7 +108,7 @@ p =  ggplot(perc_data, aes(x=PC)) +
 
 ```
 
-#### Table. S2
+#### Table. S3
 ```{r}
 
 ## load data
