@@ -5,7 +5,7 @@ author: "MaggieMCKO"
 date: "12/25/2020"
 ---
 
-This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.1 of Ko et al. (https://doi.org/10.1101/2021.02.28.432133).
+This [R Markdown](http://rmarkdown.rstudio.com) Notebook contain codes for reproducing Fig.1 of Ko et al. (https://doi.org/10.3389/fnins.2021.680530).
 
 ### Fig. 1A
 ```{r}
